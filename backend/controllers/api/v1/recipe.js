@@ -22,8 +22,32 @@ class User {
     constructor() {}
     recipe() {
         return async (req, res) => {
-            let { limit, auth, offset, query } = req.body;
+            let { id, auth } = req.body;
+            
+            let recipe = await FetchGetApi(`https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&apiKey=b2db2a372d9d41baa5f9205f1dbd866c`);
+            if (!recipe) return error.sendBadRequest(res, "spoonacular went wrong");
+            let datra = await recipe.json();
 
+            let data = {
+                id: datra.id,
+                title: datra.title,
+                image: datra.image,
+                summary: datra.summary
+            }
+
+            console.log(datra);
+            return res.status(200).json({
+                success: true,
+                message: `recipe get successfully`,
+                data: data
+            });
+        };
+    }
+    
+    all() {
+        return async (req, res) => {
+            let { limit, auth, offset, query } = req.body;
+                                        //  https://spoonacular.com/recipes/dasassdsa-1847920
             let recipe = await FetchGetApi(`https://spoonacular.com/search/all?site=spoonacular.com&limit=${limit}&offset=${offset}&query=${query}}`);
             if (!recipe) return error.sendBadRequest(res, "spoonacular went wrong");
             let datra = await recipe.json();

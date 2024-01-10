@@ -21,6 +21,11 @@ routes.post('/all', jwtVerify, [
     check('limit').notEmpty().isNumeric().withMessage('limit is required'),
     check('offset').notEmpty().isNumeric().withMessage('offset is required'),
     check('query').optional()
+],  asyncHandler(recipeController.all()));
+
+// curl --location 'localhost:3001/api/v1/recipe/recipe' --header 'Content-Type: application/json'  --data '{ "id": 655249 }'
+routes.post('/recipe', [
+    check('id').notEmpty().isNumeric().withMessage('id is required')
 ],  asyncHandler(recipeController.recipe()));
 
 
